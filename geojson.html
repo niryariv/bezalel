@@ -34,25 +34,25 @@
 
     L.tileLayer.provider('Stadia.OSMBright').addTo(map)
   
+    // Add location control to get the user's current location
     map.locate({setView: true, maxZoom: 16});
     L.control.locate().addTo(map);
-    
+  
+    // Add map scale
+    L.control.scale().addTo(map);
+
+    // read GeoJSON data from data/tipot_wgs.geojson
     var geojsonLayer = new L.GeoJSON.AJAX("data/tipot_wgs.geojson", {onEachFeature:onEachFeature});
 
+    // create a text for each GeoJSON marker
     function onEachFeature(feature, layer){
         var out = [];
-        if (feature.properties){
-            for(key in feature.properties){
-                out.push(key+": "+feature.properties[key]);
-            }   
-            layer.bindPopup(out.join("<br />"));
-        }
-        // layer.bindPopup(
-        //     "<b>" + feature.properties['שם המוסד'] + "</b><br />" + feature.properties['כתובת']
-        // );
-       
+        layer.bindPopup(
+            "<b>" + feature.properties['שם המוסד'] + "</b><br />" + feature.properties['כתובת']
+        );        
     }
 
+    // Render the JSON markers
 	geojsonLayer.addTo(map);
     
     

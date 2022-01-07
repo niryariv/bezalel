@@ -37,23 +37,26 @@
   
     map.locate({setView: true, maxZoom: 16});
     L.control.locate().addTo(map);
+    L.control.scale().addTo(map);
     
+    // Read GeoJSON data into a heat layer
     var geojsonLayer = new L.GeoJSON.AJAX("data/tipot_wgs.geojson", {onEachFeature:add_tipa});
     var heatLayer = L.heatLayer([], {radius: 10, minOpacity:1, maxZoom:8}).addTo(map);
 
+    // Add a point to the heat layer
     function add_tipa(feature, layer){
         c = feature.geometry.coordinates;
         heatLayer.addLatLng([c[1],c[0]]);
     }
     
+    // Read a second GeoJSON file, this time use a different color gradient
+    var geojsonLayer = new L.GeoJSON.AJAX("data/old_wgs.geojson", {onEachFeature:add_old});
+    var heatLayer_old = L.heatLayer([], {radius: 10, minOpacity:1, maxZoom:8, gradient:{0:'#fff', 1:'#111'}}).addTo(map);
 
-    // var geojsonLayer = new L.GeoJSON.AJAX("data/old_wgs.geojson", {onEachFeature:add_old});
-    // var heatLayer_old = L.heatLayer([], {radius: 10, minOpacity:1, maxZoom:8, gradient:{0:'#fff', 1:'#111'}}).addTo(map);
-
-    // function add_old(feature, layer){
-    //     c = feature.geometry.coordinates;
-    //     heatLayer_old.addLatLng([c[1],c[0]]);
-    // }
+    function add_old(feature, layer){
+        c = feature.geometry.coordinates;
+        heatLayer_old.addLatLng([c[1],c[0]]);
+    }
 
 
 </script>
